@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Portfolio - Crafting Intuitive Digital Experiences</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/images/signature.png" alt="SAEID" class="logo-signature">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#resume">Resume</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Crafting<br>Intuitive <span class="gradient-text">Digital</span><br>Experiences</h1>
+                <p>Bringing creative visions to life through innovative design and development solutions.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">Get Started</button>
+                    <button class="btn btn-outline">View Work</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>12+</h3>
+                        <p>Years of Experience</p>
+                    </div>
+                    <div class="stat">
+                        <h3>250+</h3>
+                        <p>Successful Projects</p>
+                    </div>
+                    <div class="stat">
+                        <h3>680+</h3>
+                        <p>Happy Clients</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-container">
+                    <img src="assets/images/PERSONAL_IMAGE.jpg" alt="Saeid Profile" class="profile-img">
+                </div>
+                <div class="floating-elements">
+                    <div class="floating-element element-1"></div>
+                    <div class="floating-element element-2"></div>
+                    <div class="floating-element element-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    (function(){
+        const constellation = document.querySelector('.skills-constellation.network-mode');
+        if(!constellation) return;
+        const svg = constellation.querySelector('.skill-connectors');
+        let paths = [];
+        function draw(){
+            const hub = constellation.querySelector('.hub-sticker');
+            const cards = Array.from(constellation.querySelectorAll('.skills-column .skill-card'));
+            if(!hub || !cards.length) return;
+            const hubRect = hub.getBoundingClientRect();
+            const svgRect = svg.getBoundingClientRect();
+            const cx = hubRect.left + hubRect.width/2 - svgRect.left;
+            const cy = hubRect.top + hubRect.height/2 - svgRect.top;
+            svg.setAttribute('viewBox', `0 0 ${svgRect.width} ${svgRect.height}`);
+            svg.innerHTML='';
+            paths = [];
+
+            // Collect vertical centers to span trunk
+            const centersY = cards.map(c=>{
+                const r = c.getBoundingClientRect();
+                return r.top + r.height/2 - svgRect.top;
+            });
+            const minY = Math.min(...centersY, cy) - 10;
+            const maxY = Math.max(...centersY, cy) + 10;
+
+            // Draw vertical trunk (slight gradient via stroke-dasharray animation optional)
+            const trunk = document.createElementNS('http://www.w3.org/2000/svg','path');
+            trunk.setAttribute('d', `M ${cx} ${minY} L ${cx} ${maxY}`);
+            trunk.classList.add('trunk');
+            svg.appendChild(trunk);
+
+            // Sort cards by y for nicer layering
+            const sorted = cards.slice().sort((a,b)=> a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+            sorted.forEach((card, idx)=>{
+                const r = card.getBoundingClientRect();
+                const tx = r.left + (r.width/2) - svgRect.left;
+                const ty = r.top + (r.height/2) - svgRect.top;
+                const horizontalDir = tx > cx ? 1 : -1;
+                const span = Math.abs(tx - cx);
+                const lift = Math.min(80, 20 + span*0.15); // aerial lift height
+                const c1x = cx + horizontalDir * Math.min(40, span*0.35);
+                const c1y = ty - lift; // arc rises above
+                const c2x = tx - horizontalDir * Math.min(40, span*0.25);
+                const c2y = ty - lift * 0.6;
+                const branch = document.createElementNS('http://www.w3.org/2000/svg','path');
+                const d = `M ${cx} ${ty} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${tx} ${ty}`;
+                branch.setAttribute('d', d);
+                branch.classList.add('branch');
+                branch.dataset.index = idx;
+                svg.appendChild(branch);
+
+                // Node at junction with trunk
+                const node = document.createElementNS('http://www.w3.org/2000/svg','circle');
+                node.setAttribute('cx', cx);
+                node.setAttribute('cy', ty);
+                node.setAttribute('r', 4);
+                node.classList.add('junction');
+                svg.appendChild(node);
+
+                paths.push({card, path: branch});
+            });
+
+            // Core hub node
+            const hubNode = document.createElementNS('http://www.w3.org/2000/svg','circle');
+            hubNode.setAttribute('cx', cx);
+            hubNode.setAttribute('cy', cy);
+            hubNode.setAttribute('r', 6);
+            hubNode.classList.add('hub-node');
+            svg.appendChild(hubNode);
+
+            // Hover listeners
+            paths.forEach(({card, path}) => {
+                card.addEventListener('mouseenter', () => {
+                    paths.forEach(p=>p.path.classList.remove('active'));
+                    path.classList.add('active');
+                });
+                card.addEventListener('mouseleave', () => path.classList.remove('active'));
+            });
+        }
+        const ro = new ResizeObserver(()=>requestAnimationFrame(draw));
+        ro.observe(document.body);
+        window.addEventListener('scroll', ()=>requestAnimationFrame(draw), {passive:true});
+        window.addEventListener('resize', ()=>requestAnimationFrame(draw));
+        setTimeout(draw, 50);
+    })();
+    </script>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>What do I offer?</h2>
+                <button class="btn btn-primary">View All</button>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/design.svg" alt="UI/UX Design">
+                    </div>
+                    <h3>UI/UX Design</h3>
+                    <p>Creating beautiful and functional user interfaces with exceptional user experience.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/frontend.svg" alt="Frontend Development">
+                    </div>
+                    <h3>Frontend Development</h3>
+                    <p>Building responsive and interactive web applications using modern technologies.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/branding.svg" alt="Brand Identity">
+                    </div>
+                    <h3>Brand Identity</h3>
+                    <p>Developing strong brand identities that communicate your values effectively.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/web-development.svg" alt="Web Development">
+                    </div>
+                    <h3>Web Development</h3>
+                    <p>Full-stack web development solutions tailored to your business needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2>My Latest Works</h2>
+                <button class="btn btn-primary">View All</button>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=300&fit=crop" alt="Project 1">
+                        <div class="portfolio-overlay">
+                            <h4>E-commerce Platform</h4>
+                            <p>Modern shopping experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&h=300&fit=crop" alt="Project 2">
+                        <div class="portfolio-overlay">
+                            <h4>Mobile App Design</h4>
+                            <p>Intuitive user interface</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&h=300&fit=crop" alt="Project 3">
+                        <div class="portfolio-overlay">
+                            <h4>Brand Identity</h4>
+                            <p>Complete visual identity</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=500&h=300&fit=crop" alt="Project 4">
+                        <div class="portfolio-overlay">
+                            <h4>Design Consultancy</h4>
+                            <p>Strategic design solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume">
+        <div class="container">
+            <div class="section-header">
+                <h2>My Resume</h2>
+                <button class="btn btn-primary">Download</button>
+            </div>
+            <div class="resume-content">
+                <div class="resume-column">
+                    <h3>Education</h3>
+                    <div class="resume-item">
+                        <h4>Bachelor of Computer Science</h4>
+                        <span class="year">2018 - 2022</span>
+                        <p>University of Technology</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Advanced UI/UX Certificate</h4>
+                        <span class="year">2020</span>
+                        <p>Design Institute</p>
+                    </div>
+                </div>
+                <div class="resume-column">
+                    <h3>Experience</h3>
+                    <div class="resume-item">
+                        <h4>Senior UI/UX Designer</h4>
+                        <span class="year">2022 - Present</span>
+                        <p>Tech Solutions Inc.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Frontend Developer</h4>
+                        <span class="year">2020 - 2022</span>
+                        <p>Digital Agency</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Showcase Section -->
+    <section id="skills" class="skills-showcase">
+        <div class="container">
+            <h2 class="skills-title">
+                <span class="title-accent">Skills</span> & Expertise
+            </h2>
+            
+            <div class="skills-constellation network-mode">
+                <!-- Left Column -->
+                <div class="skills-column left">
+                    <div class="skill-card" style="--color: 0, 255, 255">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM8 8v8h8V8H8zm6 6H10V10h4v4z"/></svg>
+                            </div>
+                            <h3>Frontend Development</h3>
+                            <p class="skill-tag">React • Vue • TypeScript</p>
+                            <p>Crafting modern, responsive interfaces with cutting-edge frameworks</p>
+                        </div>
+                    </div>
+                    <div class="skill-card" style="--color: 0, 255, 157">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            </div>
+                            <h3>UI/UX Design</h3>
+                            <p class="skill-tag">Figma • Adobe • Prototyping</p>
+                            <p>Creating intuitive interfaces that enhance user satisfaction</p>
+                        </div>
+                    </div>
+                    <div class="skill-card" style="--color: 255, 165, 0">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 19H7V5h10v14zM7 1h10c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2z"/></svg>
+                            </div>
+                            <h3>Mobile Development</h3>
+                            <p class="skill-tag">React Native • Flutter</p>
+                            <p>Building cross-platform apps with native performance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Hub / Sticker -->
+                <div class="central-hub sticker-mode">
+                    <div class="hub-sticker">
+                        <svg viewBox="0 0 100 100" class="sticker-icon" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="50" cy="50" r="42" stroke="#00fff5" stroke-opacity="0.25"/>
+                            <circle cx="50" cy="50" r="28" stroke="#00fff5" stroke-opacity="0.35" stroke-dasharray="4 6"/>
+                            <path d="M30 50h40M50 30v40" stroke="#00fff5" stroke-opacity="0.6"/>
+                            <circle cx="50" cy="50" r="6" fill="#00fff5" fill-opacity="0.85"/>
+                        </svg>
+                        <div class="hub-labels"></div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="skills-column right">
+                    <div class="skill-card" style="--color: 138, 43, 226">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM4 19V5h16v14H4z"/></svg>
+                            </div>
+                            <h3>Backend Engineering</h3>
+                            <p class="skill-tag">Node.js • Python • APIs</p>
+                            <p>Building scalable server architectures and robust databases</p>
+                        </div>
+                    </div>
+                    <div class="skill-card" style="--color: 255, 0, 255">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.54-4.46-10-10-10S2 6.46 2 12s4.46 10 10 10 10-4.46 10-10zm-10 8c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                            </div>
+                            <h3>DevOps & Cloud</h3>
+                            <p class="skill-tag">AWS • Docker • CI/CD</p>
+                            <p>Deploying cloud infrastructure with automated pipelines</p>
+                        </div>
+                    </div>
+                    <div class="skill-card" style="--color: 0, 255, 200">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                            </div>
+                            <h3>AI & Machine Learning</h3>
+                            <p class="skill-tag">TensorFlow • PyTorch • NLP</p>
+                            <p>Implementing intelligent algorithms and ML models</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connector SVG overlay -->
+                <svg class="skill-connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+            </div>
+
+            <div class="skills-footer">
+                <div class="trusted-companies">
+                    <p>Trusted by industry leaders</p>
+                    <div class="company-grid">
+                        <span class="company-tag">Google</span>
+                        <span class="company-tag">Apple</span>
+                        <span class="company-tag">Microsoft</span>
+                        <span class="company-tag">Amazon</span>
+                        <span class="company-tag">Netflix</span>
+                        <span class="company-tag">Meta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Client's Testimonials</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                    </div>
+                    <p>"Outstanding work! The portfolio design exceeded our expectations and delivered excellent results for our brand."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Client 1">
+                        <div>
+                            <h4>John Smith</h4>
+                            <span>CEO, Tech Corp</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
+                    </div>
+                    <p>"Professional, creative, and delivered on time. Highly recommend for any design project!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=60&h=60&fit=crop&crop=face" alt="Client 2">
+                        <div>
+                            <h4>Sarah Johnson</h4>
+                            <span>Marketing Director</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header">
+                <h2>Recent Blog</h2>
+                <button class="btn btn-primary">View All</button>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=400&h=250&fit=crop" alt="Blog 1">
+                    <div class="blog-content">
+                        <span class="blog-date">Aug 25, 2025</span>
+                        <h3>5 Rules Truly Digital Interface</h3>
+                        <p>Essential principles for creating effective digital interfaces...</p>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=250&fit=crop" alt="Blog 2">
+                    <div class="blog-content">
+                        <span class="blog-date">Aug 22, 2025</span>
+                        <h3>Responsive Design Best Practices</h3>
+                        <p>Modern approaches to creating responsive web designs...</p>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=400&h=250&fit=crop" alt="Blog 3">
+                    <div class="blog-content">
+                        <span class="blog-date">Aug 20, 2025</span>
+                        <h3>The Art of User Experience</h3>
+                        <p>Understanding user behavior and designing for engagement...</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get in touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Leave a message</h3>
+                    <form class="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="assets/icons/email.svg" alt="Email">
+                        </div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>hello@portfolio.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="assets/icons/phone.svg" alt="Phone">
+                        </div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="assets/icons/location.svg" alt="Location">
+                        </div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>New York, NY</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <img src="assets/images/signature.png" alt="SAEID" class="logo-signature">
+                </div>
+                <div class="social-links">
+                    <a href="#" aria-label="Twitter">
+                        <img src="assets/icons/twitter.svg" alt="Twitter">
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+                    </a>
+                    <a href="#" aria-label="GitHub">
+                        <img src="assets/icons/github.svg" alt="GitHub">
+                    </a>
+                    <a href="#" aria-label="Dribbble">
+                        <img src="assets/icons/dribbble.svg" alt="Dribbble">
+                    </a>
+                </div>
+            </div>
+            <p>&copy; 2025 Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
