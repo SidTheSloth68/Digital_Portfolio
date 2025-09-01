@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Portfolio - Crafting Intuitive Digital Experiences</title>
+    <title>Environmental Portfolio - Engineering Sustainable Digital Solutions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,8 +37,8 @@
     <section id="home" class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1>Crafting<br>Intuitive <span class="gradient-text">Digital</span><br>Experiences</h1>
-                <p>Bringing creative visions to life through innovative design and development solutions.</p>
+                <h1>Engineering<br>Sustainable <span class="gradient-text">Digital</span><br>Solutions</h1>
+                <p>Using technology to build a greener future and solve environmental challenges.</p>
                 <div class="hero-buttons">
                     <button class="btn btn-primary">Get Started</button>
                     <button class="btn btn-outline">View Work</button>
@@ -71,99 +71,13 @@
         </div>
     </section>
 
-    <script>
-    (function(){
-        const constellation = document.querySelector('.skills-constellation.network-mode');
-        if(!constellation) return;
-        const svg = constellation.querySelector('.skill-connectors');
-        let paths = [];
-        function draw(){
-            const hub = constellation.querySelector('.hub-sticker');
-            const cards = Array.from(constellation.querySelectorAll('.skills-column .skill-card'));
-            if(!hub || !cards.length) return;
-            const hubRect = hub.getBoundingClientRect();
-            const svgRect = svg.getBoundingClientRect();
-            const cx = hubRect.left + hubRect.width/2 - svgRect.left;
-            const cy = hubRect.top + hubRect.height/2 - svgRect.top;
-            svg.setAttribute('viewBox', `0 0 ${svgRect.width} ${svgRect.height}`);
-            svg.innerHTML='';
-            paths = [];
 
-            // Collect vertical centers to span trunk
-            const centersY = cards.map(c=>{
-                const r = c.getBoundingClientRect();
-                return r.top + r.height/2 - svgRect.top;
-            });
-            const minY = Math.min(...centersY, cy) - 10;
-            const maxY = Math.max(...centersY, cy) + 10;
-
-            // Draw vertical trunk (slight gradient via stroke-dasharray animation optional)
-            const trunk = document.createElementNS('http://www.w3.org/2000/svg','path');
-            trunk.setAttribute('d', `M ${cx} ${minY} L ${cx} ${maxY}`);
-            trunk.classList.add('trunk');
-            svg.appendChild(trunk);
-
-            // Sort cards by y for nicer layering
-            const sorted = cards.slice().sort((a,b)=> a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-            sorted.forEach((card, idx)=>{
-                const r = card.getBoundingClientRect();
-                const tx = r.left + (r.width/2) - svgRect.left;
-                const ty = r.top + (r.height/2) - svgRect.top;
-                const horizontalDir = tx > cx ? 1 : -1;
-                const span = Math.abs(tx - cx);
-                const lift = Math.min(80, 20 + span*0.15); // aerial lift height
-                const c1x = cx + horizontalDir * Math.min(40, span*0.35);
-                const c1y = ty - lift; // arc rises above
-                const c2x = tx - horizontalDir * Math.min(40, span*0.25);
-                const c2y = ty - lift * 0.6;
-                const branch = document.createElementNS('http://www.w3.org/2000/svg','path');
-                const d = `M ${cx} ${ty} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${tx} ${ty}`;
-                branch.setAttribute('d', d);
-                branch.classList.add('branch');
-                branch.dataset.index = idx;
-                svg.appendChild(branch);
-
-                // Node at junction with trunk
-                const node = document.createElementNS('http://www.w3.org/2000/svg','circle');
-                node.setAttribute('cx', cx);
-                node.setAttribute('cy', ty);
-                node.setAttribute('r', 4);
-                node.classList.add('junction');
-                svg.appendChild(node);
-
-                paths.push({card, path: branch});
-            });
-
-            // Core hub node
-            const hubNode = document.createElementNS('http://www.w3.org/2000/svg','circle');
-            hubNode.setAttribute('cx', cx);
-            hubNode.setAttribute('cy', cy);
-            hubNode.setAttribute('r', 6);
-            hubNode.classList.add('hub-node');
-            svg.appendChild(hubNode);
-
-            // Hover listeners
-            paths.forEach(({card, path}) => {
-                card.addEventListener('mouseenter', () => {
-                    paths.forEach(p=>p.path.classList.remove('active'));
-                    path.classList.add('active');
-                });
-                card.addEventListener('mouseleave', () => path.classList.remove('active'));
-            });
-        }
-        const ro = new ResizeObserver(()=>requestAnimationFrame(draw));
-        ro.observe(document.body);
-        window.addEventListener('scroll', ()=>requestAnimationFrame(draw), {passive:true});
-        window.addEventListener('resize', ()=>requestAnimationFrame(draw));
-        setTimeout(draw, 50);
-    })();
-    </script>
 
     <!-- Services Section -->
     <section id="services" class="services">
         <div class="container">
             <div class="section-header">
-                <h2>What do I offer?</h2>
+                <h2>Technical Solutions & Services</h2>
                 <button class="btn btn-primary">View All</button>
             </div>
             <div class="services-grid">
@@ -172,28 +86,56 @@
                         <img src="assets/icons/design.svg" alt="UI/UX Design">
                     </div>
                     <h3>UI/UX Design</h3>
-                    <p>Creating beautiful and functional user interfaces with exceptional user experience.</p>
+                    <p>Creating intuitive and user-friendly interfaces using modern design principles and usability testing methodologies.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
                         <img src="assets/icons/frontend.svg" alt="Frontend Development">
                     </div>
                     <h3>Frontend Development</h3>
-                    <p>Building responsive and interactive web applications using modern technologies.</p>
+                    <p>Building responsive and interactive web applications using React, Vue.js, Angular, and modern CSS frameworks.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <img src="assets/icons/branding.svg" alt="Brand Identity">
+                        <img src="assets/icons/branding.svg" alt="Software Architecture">
                     </div>
-                    <h3>Brand Identity</h3>
-                    <p>Developing strong brand identities that communicate your values effectively.</p>
+                    <h3>Software Architecture</h3>
+                    <p>Designing scalable system architectures, microservices, and implementing design patterns for robust applications.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <img src="assets/icons/web-development.svg" alt="Web Development">
+                        <img src="assets/icons/web-development.svg" alt="Full-Stack Development">
                     </div>
-                    <h3>Web Development</h3>
-                    <p>Full-stack web development solutions tailored to your business needs.</p>
+                    <h3>Full-Stack Development</h3>
+                    <p>End-to-end web application development using Node.js, Python, databases, and cloud deployment strategies.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/design.svg" alt="Green Computing Solutions">
+                    </div>
+                    <h3>Green Computing Solutions</h3>
+                    <p>Developing energy-efficient algorithms and sustainable software solutions that minimize environmental impact and carbon footprint.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/web-development.svg" alt="Environmental Data Analytics">
+                    </div>
+                    <h3>Environmental Data Analytics</h3>
+                    <p>Building data platforms for climate monitoring, environmental impact assessment, and sustainability reporting using advanced analytics.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/branding.svg" alt="Smart IoT Solutions">
+                    </div>
+                    <h3>Smart IoT Solutions</h3>
+                    <p>Creating IoT systems for environmental monitoring, smart city applications, and resource optimization in sustainable infrastructure.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="assets/icons/frontend.svg" alt="Renewable Energy Systems">
+                    </div>
+                    <h3>Renewable Energy Systems</h3>
+                    <p>Developing software solutions for solar, wind, and renewable energy management with predictive analytics and optimization algorithms.</p>
                 </div>
             </div>
         </div>
@@ -203,43 +145,52 @@
     <section id="portfolio" class="portfolio">
         <div class="container">
             <div class="section-header">
-                <h2>My Latest Works</h2>
+                <h2>My Projects</h2>
                 <button class="btn btn-primary">View All</button>
             </div>
             <div class="portfolio-grid">
                 <div class="portfolio-item">
                     <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=300&fit=crop" alt="Project 1">
+                        <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=500&h=300&fit=crop" alt="AI Energy Optimization">
                         <div class="portfolio-overlay">
-                            <h4>E-commerce Platform</h4>
-                            <p>Modern shopping experience</p>
+                            <h4>AI-Powered Energy Optimization</h4>
+                            <p>Machine learning system for smart grid energy management and consumption prediction</p>
                         </div>
                     </div>
                 </div>
                 <div class="portfolio-item">
                     <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&h=300&fit=crop" alt="Project 2">
+                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=300&fit=crop" alt="Green Cloud Computing">
                         <div class="portfolio-overlay">
-                            <h4>Mobile App Design</h4>
-                            <p>Intuitive user interface</p>
+                            <h4>Green Cloud Computing Platform</h4>
+                            <p>Carbon-neutral cloud infrastructure with renewable energy optimization algorithms</p>
                         </div>
                     </div>
                 </div>
                 <div class="portfolio-item">
                     <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&h=300&fit=crop" alt="Project 3">
+                        <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=500&h=300&fit=crop" alt="Climate Data Analysis">
                         <div class="portfolio-overlay">
-                            <h4>Brand Identity</h4>
-                            <p>Complete visual identity</p>
+                            <h4>Climate Data Analysis & Prediction</h4>
+                            <p>Advanced climate modeling using deep learning for weather pattern prediction</p>
                         </div>
                     </div>
                 </div>
                 <div class="portfolio-item">
                     <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=500&h=300&fit=crop" alt="Project 4">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop" alt="Smart Building Energy">
                         <div class="portfolio-overlay">
-                            <h4>Design Consultancy</h4>
-                            <p>Strategic design solutions</p>
+                            <h4>Smart Building Energy Management</h4>
+                            <p>IoT-based energy monitoring system with AI-driven efficiency optimization</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=500&h=300&fit=crop" alt="Renewable Energy Analytics">
+                        <div class="portfolio-overlay">
+                            <h4>Renewable Energy Analytics</h4>
+                            <p>Predictive analytics platform for solar and wind energy output forecasting</p>
                         </div>
                     </div>
                 </div>
@@ -295,7 +246,7 @@
             <div class="skills-constellation network-mode">
                 <!-- Left Column -->
                 <div class="skills-column left">
-                    <div class="skill-card" style="--color: 0, 255, 255">
+                    <div class="skill-card" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
@@ -306,7 +257,7 @@
                             <p>Crafting modern, responsive interfaces with cutting-edge frameworks</p>
                         </div>
                     </div>
-                    <div class="skill-card" style="--color: 0, 255, 157">
+                    <div class="skill-card" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
@@ -317,15 +268,15 @@
                             <p>Creating intuitive interfaces that enhance user satisfaction</p>
                         </div>
                     </div>
-                    <div class="skill-card" style="--color: 255, 165, 0">
+                    <div class="skill-card highlighted-skill" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 19H7V5h10v14zM7 1h10c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z M11 7v6l4.25 2.5.75-1.25L12 12V7h-1z"/></svg>
                             </div>
-                            <h3>Mobile Development</h3>
-                            <p class="skill-tag">React Native • Flutter</p>
-                            <p>Building cross-platform apps with native performance</p>
+                            <h3>Green Computing / Sustainable IT</h3>
+                            <p class="skill-tag">Energy Efficiency • Carbon Footprint • Eco-Design</p>
+                            <p>Implementing sustainable technology solutions with minimal environmental impact</p>
                         </div>
                     </div>
                 </div>
@@ -345,7 +296,7 @@
 
                 <!-- Right Column -->
                 <div class="skills-column right">
-                    <div class="skill-card" style="--color: 138, 43, 226">
+                    <div class="skill-card" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
@@ -356,7 +307,7 @@
                             <p>Building scalable server architectures and robust databases</p>
                         </div>
                     </div>
-                    <div class="skill-card" style="--color: 255, 0, 255">
+                    <div class="skill-card" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
@@ -367,7 +318,7 @@
                             <p>Deploying cloud infrastructure with automated pipelines</p>
                         </div>
                     </div>
-                    <div class="skill-card" style="--color: 0, 255, 200">
+                    <div class="skill-card" style="--color: 0, 255, 245">
                         <div class="card-glow"></div>
                         <div class="card-content">
                             <div class="skill-icon">
@@ -381,62 +332,34 @@
                 </div>
 
                 <!-- Connector SVG overlay -->
-                <svg class="skill-connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+                <svg class="skill-connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#00fff5"/>
+                            <stop offset="60%" stop-color="#33d1ff"/>
+                            <stop offset="100%" stop-color="#8a2be2"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
             </div>
 
             <div class="skills-footer">
                 <div class="trusted-companies">
-                    <p>Trusted by industry leaders</p>
+                    <p>Trusted by environmental leaders</p>
                     <div class="company-grid">
-                        <span class="company-tag">Google</span>
-                        <span class="company-tag">Apple</span>
-                        <span class="company-tag">Microsoft</span>
-                        <span class="company-tag">Amazon</span>
-                        <span class="company-tag">Netflix</span>
-                        <span class="company-tag">Meta</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <div class="container">
-            <h2>Client's Testimonials</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                    </div>
-                    <p>"Outstanding work! The portfolio design exceeded our expectations and delivered excellent results for our brand."</p>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Client 1">
-                        <div>
-                            <h4>John Smith</h4>
-                            <span>CEO, Tech Corp</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                        <img src="assets/icons/star.svg" alt="5 stars" class="star-icon">
-                    </div>
-                    <p>"Professional, creative, and delivered on time. Highly recommend for any design project!"</p>
-                    <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=60&h=60&fit=crop&crop=face" alt="Client 2">
-                        <div>
-                            <h4>Sarah Johnson</h4>
-                            <span>Marketing Director</span>
-                        </div>
+                        <span class="company-tag">GreenTech</span>
+                        <span class="company-tag">EcoSolutions</span>
+                        <span class="company-tag">SolarWind</span>
+                        <span class="company-tag">CleanEnergy</span>
+                        <span class="company-tag">EarthFirst</span>
+                        <span class="company-tag">BioPlanet</span>
                     </div>
                 </div>
             </div>
@@ -452,27 +375,27 @@
             </div>
             <div class="blog-grid">
                 <article class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=400&h=250&fit=crop" alt="Blog 1">
+                    <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=250&fit=crop" alt="Solar Panels">
                     <div class="blog-content">
                         <span class="blog-date">Aug 25, 2025</span>
-                        <h3>5 Rules Truly Digital Interface</h3>
-                        <p>Essential principles for creating effective digital interfaces...</p>
+                        <h3>5 Principles of Green Web Design</h3>
+                        <p>Essential guidelines for creating sustainable digital interfaces that minimize environmental impact...</p>
                     </div>
                 </article>
                 <article class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=250&fit=crop" alt="Blog 2">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop" alt="Clean Energy Grid">
                     <div class="blog-content">
                         <span class="blog-date">Aug 22, 2025</span>
-                        <h3>Responsive Design Best Practices</h3>
-                        <p>Modern approaches to creating responsive web designs...</p>
+                        <h3>Building Carbon-Neutral Web Applications</h3>
+                        <p>Learn how to minimize your website's environmental impact through optimized code, green hosting, and sustainable design patterns...</p>
                     </div>
                 </article>
                 <article class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=400&h=250&fit=crop" alt="Blog 3">
+                    <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=400&h=250&fit=crop" alt="Wind Turbines">
                     <div class="blog-content">
                         <span class="blog-date">Aug 20, 2025</span>
-                        <h3>The Art of User Experience</h3>
-                        <p>Understanding user behavior and designing for engagement...</p>
+                        <h3>The Future of Green Technology</h3>
+                        <p>Exploring renewable energy solutions and their integration with modern web applications...</p>
                     </div>
                 </article>
             </div>
@@ -500,7 +423,7 @@
                         </div>
                         <div>
                             <h4>Email</h4>
-                            <p>hello@portfolio.com</p>
+                            <p>eco@sustainabletech.com</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -553,5 +476,173 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+    // Aerial connector lines from central hub to skill cards
+    (function() {
+        const constellation = document.querySelector('.skills-constellation.network-mode');
+        if (!constellation) return;
+
+        const svg = constellation.querySelector('.skill-connectors');
+        const hub = constellation.querySelector('.hub-sticker');
+        const cards = [...constellation.querySelectorAll('.skill-card')];
+
+        if (!hub || !svg || !cards.length) return;
+
+        function buildConnectors() {
+            const svgRect = svg.getBoundingClientRect();
+            const hubRect = hub.getBoundingClientRect();
+            const hubX = hubRect.left + hubRect.width / 2 - svgRect.left;
+            const hubY = hubRect.top + hubRect.height / 2 - svgRect.top;
+
+            // Preserve defs
+            const defs = svg.querySelector('defs');
+            svg.innerHTML = '';
+            if (defs) svg.appendChild(defs);
+
+            // Create hub node with explicit styling
+            const hubNode = document.createElementNS('http://www.w3.org/2000/svg','circle');
+            hubNode.classList.add('hub-node');
+            hubNode.setAttribute('cx', hubX);
+            hubNode.setAttribute('cy', hubY);
+            hubNode.setAttribute('r', 6);
+            hubNode.setAttribute('fill', '#00fff5');
+            hubNode.setAttribute('filter', 'drop-shadow(0 0 10px rgba(0,255,245,0.7))');
+            hubNode.style.opacity = '0';
+            hubNode.style.transform = 'scale(0.3)';
+            hubNode.style.animation = 'nodeAppear 0.5s ease forwards';
+            hubNode.style.animationDelay = '0s';
+            svg.appendChild(hubNode);
+
+            // Set SVG viewBox to ensure proper rendering
+            svg.setAttribute('viewBox', `0 0 ${svgRect.width} ${svgRect.height}`);
+            svg.setAttribute('width', svgRect.width);
+            svg.setAttribute('height', svgRect.height);
+
+            cards.forEach((card, i) => {
+                const cardRect = card.getBoundingClientRect();
+                const targetX = cardRect.left + cardRect.width / 2 - svgRect.left;
+                const targetY = cardRect.top + cardRect.height / 2 - svgRect.top;
+                
+                // Ensure coordinates are valid numbers
+                if (isNaN(targetX) || isNaN(targetY) || isNaN(hubX) || isNaN(hubY)) {
+                    console.warn(`Invalid coordinates for card ${i}:`, {targetX, targetY, hubX, hubY});
+                    return;
+                }
+                
+                // Calculate angle from hub center to card center
+                const dx = targetX - hubX;
+                const dy = targetY - hubY;
+                const angle = Math.atan2(dy, dx);
+                
+                // Calculate exit point on the circle's edge 
+                // Using radius 8 to account for visual effects and ensure lines start outside the circle
+                const circleRadius = 8;
+                const exitX = hubX + Math.cos(angle) * circleRadius;
+                const exitY = hubY + Math.sin(angle) * circleRadius;
+                
+                // Create line path from circle edge to card center
+                const pathData = `M ${exitX} ${exitY} L ${targetX} ${targetY}`;
+
+                // Create connector path with identical styling - force all properties
+                const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+                path.classList.add('connector-line');
+                path.setAttribute('d', pathData);
+                path.setAttribute('pathLength', '1');
+                
+                // Force identical visual properties for all lines
+                path.setAttribute('stroke', 'url(#lineGradient)');
+                path.setAttribute('stroke-width', '2.2');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-linejoin', 'round');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('filter', 'url(#glow)');
+                path.setAttribute('stroke-dasharray', '1');
+                path.setAttribute('stroke-dashoffset', '1');
+                path.setAttribute('opacity', '0');
+                
+                // Force identical animations for all lines
+                const animationDelay = 0.1 + i * 0.08;
+                path.style.setProperty('--delay', `${animationDelay}s`);
+                path.style.animation = 'drawLine 1s ease forwards';
+                path.style.animationDelay = `${animationDelay}s`;
+                path.style.transition = 'stroke-width 0.3s ease, opacity 0.3s ease, filter 0.3s ease';
+                
+                // Add debug info
+                path.setAttribute('data-card-index', i);
+                path.setAttribute('data-card-name', card.querySelector('h3')?.textContent || `Card ${i}`);
+                
+                svg.appendChild(path);
+
+                // Create endpoint node with identical styling
+                const cardNode = document.createElementNS('http://www.w3.org/2000/svg','circle');
+                cardNode.classList.add('card-node');
+                cardNode.setAttribute('cx', targetX);
+                cardNode.setAttribute('cy', targetY);
+                cardNode.setAttribute('r', 4);
+                cardNode.setAttribute('fill', '#00fff5');
+                cardNode.setAttribute('filter', 'drop-shadow(0 0 6px rgba(0,255,245,0.75))');
+                cardNode.setAttribute('opacity', '0');
+                
+                // Force identical node animation
+                const nodeDelay = 0.2 + i * 0.08;
+                cardNode.style.setProperty('--delay', `${nodeDelay}s`);
+                cardNode.style.transform = 'scale(0.3)';
+                cardNode.style.animation = 'nodeAppear 0.4s ease forwards';
+                cardNode.style.animationDelay = `${nodeDelay}s`;
+                cardNode.setAttribute('data-card-index', i);
+                
+                svg.appendChild(cardNode);
+
+                // Add hover interactions with identical behavior for all cards
+                const handleMouseEnter = () => {
+                    // Reset all lines to default state
+                    svg.querySelectorAll('.connector-line').forEach(p => {
+                        p.classList.remove('active');
+                        p.setAttribute('stroke-width', '2.2');
+                        p.setAttribute('filter', 'url(#glow)');
+                    });
+                    // Activate current line
+                    path.classList.add('active');
+                    path.setAttribute('stroke-width', '3.0');
+                    path.setAttribute('filter', 'drop-shadow(0 0 8px rgba(0,255,245,0.9)) drop-shadow(0 0 18px rgba(138,43,226,0.6))');
+                };
+                
+                const handleMouseLeave = () => {
+                    path.classList.remove('active');
+                    path.setAttribute('stroke-width', '2.2');
+                    path.setAttribute('filter', 'url(#glow)');
+                };
+                
+                // Remove any existing listeners and add new ones
+                card.removeEventListener('mouseenter', handleMouseEnter);
+                card.removeEventListener('mouseleave', handleMouseLeave);
+                card.addEventListener('mouseenter', handleMouseEnter);
+                card.addEventListener('mouseleave', handleMouseLeave);
+            });
+
+            svg.classList.add('connectors-ready');
+        }
+
+        // Rebuild on resize with debouncing
+        let resizeTimer;
+        function handleResize() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                requestAnimationFrame(buildConnectors);
+            }, 100);
+        }
+
+        // Event listeners
+        window.addEventListener('resize', handleResize, { passive: true });
+        window.addEventListener('orientationchange', handleResize);
+        
+        // Initial build
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', buildConnectors);
+        } else {
+            requestAnimationFrame(buildConnectors);
+        }
+    })();
+    </script>
 </body>
 </html>
