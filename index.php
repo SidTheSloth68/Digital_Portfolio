@@ -1,3 +1,31 @@
+<?php
+// index.php
+try {
+    // Database configuration
+    $host = 'localhost';
+    $db   = 'digital_portfolio';
+    $user = 'root';
+    $pass = '';
+    $charset = 'utf8mb4';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+
+    $pdo = new PDO($dsn, $user, $pass, $options);
+    
+    // Fetch projects and education
+    $projects = $pdo->query('SELECT * FROM projects ORDER BY id DESC LIMIT 5')->fetchAll();
+    $education = $pdo->query('SELECT * FROM education ORDER BY year DESC')->fetchAll();
+} catch (PDOException $e) {
+    // Fallback if database is not available
+    $projects = [];
+    $education = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,17 +72,14 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <h3>12+</h3>
+                        <h3>2+</h3>
                         <p>Years of Experience</p>
                     </div>
                     <div class="stat">
-                        <h3>250+</h3>
+                        <h3>5+</h3>
                         <p>Successful Projects</p>
                     </div>
-                    <div class="stat">
-                        <h3>680+</h3>
-                        <p>Happy Clients</p>
-                    </div>
+                   
                 </div>
             </div>
             <div class="hero-image">
@@ -140,7 +165,7 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
+    <!-- Portfolio Section - Dynamic Content -->
     <section id="portfolio" class="portfolio">
         <div class="container">
             <div class="section-header">
@@ -148,56 +173,71 @@
                 <button class="btn btn-primary">View All</button>
             </div>
             <div class="portfolio-grid">
-                <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=500&h=300&fit=crop" alt="AI Energy Optimization">
-                        <div class="portfolio-overlay">
-                            <h4>AI-Powered Energy Optimization</h4>
-                            <p>Machine learning system for smart grid energy management and consumption prediction</p>
+                <?php if (!empty($projects)): ?>
+                    <?php foreach ($projects as $project): ?>
+                        <a href="<?= htmlspecialchars($project['project_url'] ?? '#') ?>" target="_blank" class="portfolio-item">
+                            <div class="portfolio-image">
+                                <img src="<?= htmlspecialchars($project['image_url'] ?? 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=500&h=300&fit=crop') ?>" alt="<?= htmlspecialchars($project['title']) ?>">
+                                <div class="portfolio-overlay">
+                                    <h4><?= htmlspecialchars($project['title']) ?></h4>
+                                    <p><?= htmlspecialchars($project['description']) ?></p>
+                                </div>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <!-- Fallback content when no projects in database -->
+                    <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=500&h=300&fit=crop" alt="AI Energy Optimization">
+                            <div class="portfolio-overlay">
+                                <h4>AI-Powered Energy Optimization</h4>
+                                <p>Machine learning system for smart grid energy management and consumption prediction</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=300&fit=crop" alt="Green Cloud Computing">
-                        <div class="portfolio-overlay">
-                            <h4>Green Cloud Computing Platform</h4>
-                            <p>Carbon-neutral cloud infrastructure with renewable energy optimization algorithms</p>
+                    </a>
+                    <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=300&fit=crop" alt="Green Cloud Computing">
+                            <div class="portfolio-overlay">
+                                <h4>Green Cloud Computing Platform</h4>
+                                <p>Carbon-neutral cloud infrastructure with renewable energy optimization algorithms</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=500&h=300&fit=crop" alt="Climate Data Analysis">
-                        <div class="portfolio-overlay">
-                            <h4>Climate Data Analysis & Prediction</h4>
-                            <p>Advanced climate modeling using deep learning for weather pattern prediction</p>
+                    </a>
+                    <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=500&h=300&fit=crop" alt="Climate Data Analysis">
+                            <div class="portfolio-overlay">
+                                <h4>Climate Data Analysis & Prediction</h4>
+                                <p>Advanced climate modeling using deep learning for weather pattern prediction</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop" alt="Smart Building Energy">
-                        <div class="portfolio-overlay">
-                            <h4>Smart Building Energy Management</h4>
-                            <p>IoT-based energy monitoring system with AI-driven efficiency optimization</p>
+                    </a>
+                    <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop" alt="Smart Building Energy">
+                            <div class="portfolio-overlay">
+                                <h4>Smart Building Energy Management</h4>
+                                <p>IoT-based energy monitoring system with AI-driven efficiency optimization</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=500&h=300&fit=crop" alt="Renewable Energy Analytics">
-                        <div class="portfolio-overlay">
-                            <h4>Renewable Energy Analytics</h4>
-                            <p>Predictive analytics platform for solar and wind energy output forecasting</p>
+                    </a>
+                    <a href="https://github.com/SidTheSloth68/EnvironmentSOS" target="_blank" class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=500&h=300&fit=crop" alt="Renewable Energy Analytics">
+                            <div class="portfolio-overlay">
+                                <h4>Renewable Energy Analytics</h4>
+                                <p>Predictive analytics platform for solar and wind energy output forecasting</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <!-- Resume Section -->
+    <!-- Resume Section - Dynamic Education Content -->
     <section id="resume" class="resume">
         <div class="container">
             <div class="section-header">
@@ -206,27 +246,41 @@
             <div class="resume-content">
                 <div class="resume-column">
                     <h3>Education</h3>
-                    <div class="resume-item">
-                        <h4>Bachelor of Computer Science</h4>
-                        <span class="year">2018 - 2022</span>
-                        <p>University of Technology</p>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Advanced UI/UX Certificate</h4>
-                        <span class="year">2020</span>
-                        <p>Design Institute</p>
-                    </div>
+                    <?php if (!empty($education)): ?>
+                        <?php foreach ($education as $edu): ?>
+                            <div class="resume-item">
+                                <h4><?= htmlspecialchars($edu['degree']) ?></h4>
+                                <span class="year"><?= htmlspecialchars($edu['year']) ?></span>
+                                <p><?= htmlspecialchars($edu['institution']) ?></p>
+                                <?php if (!empty($edu['description'])): ?>
+                                    <p class="description"><?= htmlspecialchars($edu['description']) ?></p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <!-- Fallback content when no education in database -->
+                        <div class="resume-item">
+                            <h4>Bachelor of Computer Science</h4>
+                            <span class="year">2018 - 2022</span>
+                            <p>University of Technology</p>
+                        </div>
+                        <div class="resume-item">
+                            <h4>Advanced UI/UX Certificate</h4>
+                            <span class="year">2020</span>
+                            <p>Design Institute</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="resume-column">
                     <h3>Experience</h3>
                     <div class="resume-item">
-                        <h4>Senior UI/UX Designer</h4>
+                        <h4>Freelance Designer</h4>
                         <span class="year">2022 - Present</span>
                         <p>Tech Solutions Inc.</p>
                     </div>
                     <div class="resume-item">
-                        <h4>Frontend Developer</h4>
-                        <span class="year">2020 - 2022</span>
+                        <h4>Intern Developer</h4>
+                        <span class="year">2023 - 2024</span>
                         <p>Digital Agency</p>
                     </div>
                 </div>
@@ -350,14 +404,14 @@
 
             <div class="skills-footer">
                 <div class="trusted-companies">
-                    <p>Trusted by environmental leaders</p>
+                    <p>Trusted by tech leaders</p>
                     <div class="company-grid">
-                        <span class="company-tag">GreenTech</span>
-                        <span class="company-tag">EcoSolutions</span>
+                        <span class="company-tag">Google</span>
+                        <span class="company-tag">UpWork</span>
                         <span class="company-tag">SolarWind</span>
-                        <span class="company-tag">CleanEnergy</span>
+                        <span class="company-tag">Fiverr</span>
                         <span class="company-tag">EarthFirst</span>
-                        <span class="company-tag">BioPlanet</span>
+    
                     </div>
                 </div>
             </div>
@@ -407,10 +461,12 @@
             <div class="contact-content">
                 <div class="contact-info">
                     <h3>Leave a message</h3>
-                    <form class="contact-form">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <form class="contact-form" action="https://formspree.io/f/xovnpwpz" method="POST">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <input type="tel" name="phone" placeholder="Your Mobile Number">
+                        <input type="text" name="subject" placeholder="Subject" required>
+                        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
                         <button type="submit" class="btn btn-primary">Send Message</button>
                     </form>
                 </div>
@@ -421,7 +477,7 @@
                         </div>
                         <div>
                             <h4>Email</h4>
-                            <p>eco@sustainabletech.com</p>
+                            <p>sayeedbinomar27@gmail.com</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -430,7 +486,7 @@
                         </div>
                         <div>
                             <h4>Phone</h4>
-                            <p>+1 (555) 123-4567</p>
+                            <p>+8801648904426</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -439,7 +495,7 @@
                         </div>
                         <div>
                             <h4>Location</h4>
-                            <p>New York, NY</p>
+                            <p>Mirpur-12,Dhaka-1216</p>
                         </div>
                     </div>
                 </div>
@@ -461,7 +517,7 @@
                     <a href="#" aria-label="LinkedIn">
                         <img src="assets/icons/linkedin.svg" alt="LinkedIn">
                     </a>
-                    <a href="#" aria-label="GitHub">
+                    <a href="https://github.com/SidTheSloth68" target="_blank" aria-label="GitHub">
                         <img src="assets/icons/github.svg" alt="GitHub">
                     </a>
                     <a href="#" aria-label="Dribbble">
